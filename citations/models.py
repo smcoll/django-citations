@@ -1,5 +1,5 @@
-from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes import generic
 from django.contrib.humanize.templatetags.humanize import ordinal
 from django.db import models
 from django.utils.html import escape
@@ -20,7 +20,7 @@ class Reference(models.Model):
     """
     content_type = models.ForeignKey(ContentType)
     object_id = models.PositiveIntegerField()
-    content_object = GenericForeignKey('content_type', 'object_id')
+    content_object = generic.GenericForeignKey('content_type', 'object_id')
 
     type = models.CharField(max_length=3, choices=REFERENCE_TYPE_CHOICES, default='BK')
     slug = models.CharField(max_length=128, unique=True)
