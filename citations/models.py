@@ -25,7 +25,7 @@ class Reference(models.Model):
     type = models.CharField(max_length=3, choices=REFERENCE_TYPE_CHOICES, default='BK')
     slug = models.CharField(max_length=128, unique=True)
 
-    author = models.CharField(max_length=512)
+    author = models.CharField(max_length=512, blank=True, null=True)
     title = models.CharField(max_length=512)
     year = models.IntegerField(default=2000)
 
