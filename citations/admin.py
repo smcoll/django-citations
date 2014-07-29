@@ -1,5 +1,6 @@
 from django.conf.urls import patterns, url
 from django.contrib import admin
+from django.contrib.contenttypes import generic
 from django.shortcuts import render_to_response
 
 import citations.models as reference_models
@@ -11,8 +12,17 @@ except ImportError:
     pass
 
 
+class InlineReferenceAdmin(generic.GenericStackedInline):
+    """ Inline to use on a related object's ModelAdmin
+    """
+    model = reference_models.Reference
+    extra = 1
+    prepopulated_fields = {'slug': ('title',)}
+
+
 class ReferenceAdmin(admin.ModelAdmin):
     change_list_template = 'admin/updated_change_form.html'
+    list_filter = ('content_type',)
 
     def get_urls(self):
         urls = super(ReferenceAdmin, self).get_urls()
@@ -44,6 +54,5 @@ class ReferenceAdmin(admin.ModelAdmin):
                 context = {"form": form}
                 return render_to_response("admin/imported.html", context,
                                           context_instance=RequestContext(request))
-
 
 admin.site.register(reference_models.Reference, ReferenceAdmin)
